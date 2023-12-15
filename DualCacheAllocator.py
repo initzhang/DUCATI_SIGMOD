@@ -74,8 +74,11 @@ def get_slope(args, graph, counts, seeds_list, all_data):
     slope_tic = time.time()
     fanouts = [int(x) for x in args.fanouts.split(",")]
     adj_counts, nfeat_counts = counts
-    adj_ratio_steps = [x/10 for x in range(0,10,1)]
-    nfeat_ratio_steps = [x/10 for x in range(0,10,1)]
+    adj_factor = (args.total_budget * 1024 ** 3) / ((graph.num_edges() + graph.num_nodes() + 1) * 8.)
+    nfeat_factor = (args.total_budget * 1024 ** 3) / (graph.num_nodes() * (args.fake_dim + 1) * 4.)
+    adj_ratio_steps = [adj_factor*x/10 for x in range(0,10,1)]
+    nfeat_ratio_steps = [nfeat_factor*x/10 for x in range(0,10,1)]
+
 
     ###################
     ### get adj slope
